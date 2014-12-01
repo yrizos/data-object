@@ -21,7 +21,7 @@ trait DataObjectTrait
 
     public function offsetSet($offset, $value)
     {
-        if(!is_string($offset)) throw new \InvalidArgumentException('Offset must be string');
+        if (!is_string($offset)) throw new \InvalidArgumentException('Offset must be string');
 
         $this->data[$offset] = $value;
     }
@@ -85,7 +85,6 @@ trait DataObjectTrait
     {
         $this->data = unserialize($data);
     }
-
 
     public static function extractArray($data)
     {
