@@ -86,6 +86,11 @@ trait DataObjectTrait
         $this->data = unserialize($data);
     }
 
+    final public function getIterator()
+    {
+        return new \ArrayIterator($this->getData());
+    }
+
     public static function extractArray($data)
     {
         if ($data instanceof DataObjectInterface) {

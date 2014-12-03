@@ -2,7 +2,7 @@
 
 namespace DataObject;
 
-interface DataObjectInterface extends \ArrayAccess, \Countable, \Serializable
+interface DataObjectInterface extends \ArrayAccess, \Countable, \Serializable, \IteratorAggregate
 {
 
     public function getData();
