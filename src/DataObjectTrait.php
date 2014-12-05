@@ -7,14 +7,16 @@ trait DataObjectTrait
 
     private $data = [];
 
-    final public function getData()
+    public function getData()
     {
         return $this->data;
     }
 
-    final public function setData($data)
+    public function setData($data)
     {
-        $this->data = self::extractArray($data);
+        $data = self::extractArray($data);
+
+        foreach ($data as $key => $value) $this[$key] = $value;
 
         return $this;
     }
