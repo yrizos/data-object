@@ -8,12 +8,7 @@
 
     <filter>
         <whitelist>
-            <directory suffix=".php">./</directory>
-            <exclude>
-                <directory>./../vendor</directory>
-                <directory>./../tests</directory>
-                <directory>./../examples</directory>
-            </exclude>
+            <directory suffix=".php">./../src</directory>
         </whitelist>
     </filter>
 </phpunit>
