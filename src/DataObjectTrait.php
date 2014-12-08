@@ -101,7 +101,7 @@ trait DataObjectTrait
             $data = $data->getArrayCopy();
         } else if ($data instanceof \Traversable) {
             $temp = [];
-            foreach ($data as $key => $value) $temp[$key] = $data;
+            foreach ($data as $key => $value) $temp[$key] = $value;
 
             $data = $temp;
         }
