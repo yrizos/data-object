@@ -1,13 +1,19 @@
-<phpunit bootstrap='./../vendor/autoload.php'>
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit bootstrap="./../vendor/autoload.php">
     <testsuites>
-        <testsuite name='DataObject'>
-            <directory suffix='Test.php'>./</directory>
+        <testsuite name="DataObject">
+            <directory suffix="Test.php">./</directory>
         </testsuite>
     </testsuites>
+
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist='true'>
-            <directory suffix='.php'>./../src</directory>
-            <directory suffix='.php'>./../vendor</directory>
+        <whitelist>
+            <directory suffix=".php">./</directory>
+            <exclude>
+                <directory>./../vendor</directory>
+                <directory>./../tests</directory>
+                <directory>./../examples</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
