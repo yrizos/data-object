@@ -10,3 +10,7 @@ install:
 before_script: mkdir -p build/logs
 
 script: phpunit --configuration ./tests/phpunit.xml --coverage-clover ./build/logs/clover.xml
+
+after_script:
+  - CODECLIMATE_REPO_TOKEN=391f1deec9b41bcc84adfea408d63d0275d077f8a23242df4d3f5c443e9c6f45 ./vendor/bin/test-reporter --stdout > codeclimate.json
+  - "curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"
