@@ -14,7 +14,7 @@ trait DataObjectTrait
 
     public function setData($data)
     {
-        $data = self::extractArray($data);
+        $data = self::normalizeArray($data);
 
         foreach ($data as $key => $value) $this[$key] = $value;
 
@@ -63,29 +63,31 @@ trait DataObjectTrait
         return $this->offsetUnset($offset);
     }
 
-    final public function values()
+    public function values()
     {
         return array_values($this->data);
     }
 
-    final public function keys()
+    public function keys()
     {
-        return array_keys($this->data);
+        return array_keys($this->getData());
     }
 
     final public function count()
     {
-        return count($this->data);
+        return count($this->getData());
     }
 
     final public function serialize()
     {
-        return serialize($this->data);
+        return serialize($this->getData());
     }
 
     final public function unserialize($data)
     {
-        $this->data = unserialize($data);
+        $data = unserialize($data);
+
+        $this->setData($data);
     }
 
     final public function getIterator()
@@ -93,7 +95,7 @@ trait DataObjectTrait
         return new \ArrayIterator($this->getData());
     }
 
-    public static function extractArray($data)
+    public static function normalizeArray($data)
     {
         if ($data instanceof DataObjectInterface) {
             $data = $data->getData();

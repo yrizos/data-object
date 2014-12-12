@@ -3,8 +3,10 @@ language: php
 php:
   - 5.4
 
-script: phpunit --configuration ./tests/phpunit.xml
+install:
+  - composer install
+  - composer require codeclimate/php-test-reporter:dev-master
 
-before_script:
-  - wget http://getcomposer.org/composer.phar
-  - php composer.phar install
+before_script: mkdir -p build/logs
+
+script: phpunit --configuration ./tests/phpunit.xml --coverage-clover ./build/logs/clover.xml
