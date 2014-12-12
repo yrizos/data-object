@@ -23,7 +23,8 @@ trait DataObjectTrait
 
     public function offsetSet($offset, $value)
     {
-        if (!is_string($offset)) throw new \InvalidArgumentException('Offset must be string');
+        $offset = is_string($offset) ? trim($offset) : null;
+        if (empty($offset)) throw new \InvalidArgumentException('Offset must be a non empty string.');
 
         $this->data[$offset] = $value;
     }
@@ -112,4 +113,4 @@ trait DataObjectTrait
 
         return $data;
     }
-} 
+}
