@@ -149,6 +149,60 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DateTime', $type->filter($time));
         $this->assertInstanceOf('DateTime', $type->filter($string));
         $this->assertInstanceOf('DateTime', $type->filter($datetime));
+    }
 
+    public function testAlnum()
+    {
+        $type = Type::factory('Alphanumeric');
+
+        $this->assertInstanceOf("DataObject\\Type\\AlnumType", $type);
+
+        $this->assertTrue($type->validate(1234));
+        $this->assertTrue($type->validate('abc'));
+        $this->assertTrue($type->validate('abc1234'));
+
+        $this->assertInternalType('string', $type->filter(1234));
+    }
+
+    public function testFloat()
+    {
+        $type = Type::factory('float');
+
+        $this->assertInstanceOf("DataObject\\Type\\FloatType", $type);
+
+        $this->assertTrue($type->validate(3));
+        $this->assertTrue($type->validate(3.14));
+        $this->assertTrue($type->validate('3.14'));
+
+        $this->assertInternalType('float', $type->filter(3));
+        $this->assertInternalType('float', $type->filter('3.14'));
+    }
+
+    public function testIp()
+    {
+        $type = Type::factory('ip');
+
+        $this->assertInstanceOf("DataObject\\Type\\IpType", $type);
+
+        $this->assertTrue($type->validate('127.0.0.1'));
+        $this->assertFalse($type->validate('Hello World'));
+    }
+
+    public function testUrl()
+    {
+        $type = Type::factory('url');
+
+        $this->assertInstanceOf("DataObject\\Type\\UrlType", $type);
+
+        $this->assertTrue($type->validate('www.example.com'));
+        $this->assertTrue($type->validate('example.com'));
+        $this->assertTrue($type->validate('http://www.example.com'));
+        $this->assertTrue($type->validate('https://www.example.com'));
+        $this->assertTrue($type->validate('http://example.com'));
+        $this->assertTrue($type->validate('https://example.com'));
+
+        $this->assertFalse($type->validate('Hello World'));
+        $this->assertFalse($type->validate('.example.com'));
+        $this->assertFalse($type->validate('http:/www.example.com'));
     }
 }
