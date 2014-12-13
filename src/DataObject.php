@@ -14,7 +14,8 @@ class DataObject implements DataObjectInterface
 
     public function setData($data)
     {
-        $data = self::normalizeArray($data);
+        $this->data = [];
+        $data       = self::normalizeArray($data);
 
         foreach ($data as $offset => $value) $this->offsetSet($offset, $value);
 

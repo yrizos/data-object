@@ -76,10 +76,11 @@ class Entity extends DataObject implements EntityInterface
 
     public function offsetGet($offset)
     {
-        return
-            isset($this->data[$offset])
-                ? $this->data[$offset]
-                : $this->getDefault($offset);
+        if (!isset($this[$offset])) return $this->getDefault($offset);
+
+        $type = $this->getFieldType($offset);
+
+        return $type->filter($this[$offset]);
     }
 
     public function offsetSet($offset, $value)
@@ -88,7 +89,7 @@ class Entity extends DataObject implements EntityInterface
         if (!$type->validate($value)) throw new \InvalidArgumentException($offset . ' validation failed.');
 
         $value = $type->filter($value);
-        if ($value !== $this->offsetGet($offset)) $this->modified = true;
+        if ($value !== parent::offsetGet($offset)) $this->modified = true;
 
         parent::offsetSet($offset, $value);
     }
