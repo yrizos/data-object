@@ -34,7 +34,7 @@ class Entity extends DataObject implements EntityInterface
                 if (empty($offset)) continue;
 
                 $this->fields[$offset] = [
-                    'type'    => isset($value['type']) ? Type::factory($value['type']) : new RawType(),
+                    'type' => isset($value['type']) ? $this->getType($value['type']) : new RawType(),
                     'default' => isset($value['default']) ? $value['default'] : null
                 ];
 
@@ -43,6 +43,11 @@ class Entity extends DataObject implements EntityInterface
         }
 
         return $this->fields;
+    }
+
+    protected function getType($type)
+    {
+        return Type::factory($type);
     }
 
     public function getField($offset)
