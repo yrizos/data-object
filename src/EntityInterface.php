@@ -2,10 +2,10 @@
 
 namespace DataObject;
 
-interface Entity extends DataObjectInterface
+interface EntityInterface extends DataObjectInterface
 {
 
-    public static function fields();
+    public function __construct($data = []);
 
     public function getFields();
 
@@ -13,8 +13,9 @@ interface Entity extends DataObjectInterface
 
     public function getFieldType($offset);
 
-    public function getFieldDefault($offset);
+    public function getDefault($offset);
 
     public function isModified();
 
+    public static function fields();
 } 

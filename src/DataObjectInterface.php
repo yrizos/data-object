@@ -20,4 +20,8 @@ interface DataObjectInterface extends \ArrayAccess, \Countable, \Serializable, \
     public function values();
 
     public function keys();
+
+    public function toArray();
+
+    public function toJson();
 }

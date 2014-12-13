@@ -125,4 +125,12 @@ class DataObjectTest extends \PHPUnit_Framework_TestCase
         $dto[] = 'value';
     }
 
+    public function testToArray()
+    {
+        $dto = new DataObject();
+        $dto->setData($this->data);
+
+        $this->assertEquals($dto->getData(), $dto->toArray());
+    }
+
 }

@@ -11,17 +11,17 @@ abstract class Type implements TypeInterface
     public static function factory($type)
     {
         if (strpos($type, "\\") === false) {
-            $type = ucfirst(strtolower(trim(strval($type))));
-            if ($type == 'Int') $type = 'Integer';
-            if ($type == 'Bool') $type = 'Boolean';
+            $type = ucfirst(trim(strval($type)));
+            if (strripos(strrev($type), strrev('type')) === false) $type .= 'Type';
 
-            $type = "DataEntity\\Type\\" . $type;
+            $type = "DataObject\\Type\\" . $type;
         }
 
-        return
-            class_exists($type)
-            && in_array("DataEntity\\TypeInterface", class_implements($type))
-                ? new $type
-                : new Raw;
+        if (
+            !class_exists($type)
+            || !in_array("DataObject\\TypeInterface", class_implements($type))
+        ) throw new \InvalidArgumentException('Type ' . $type . ' is invalid.');
+
+        return new $type;
     }
 } 
