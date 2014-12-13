@@ -12,12 +12,6 @@ class Entity extends DataObject implements EntityInterface
     /** @var array */
     private $fields = null;
 
-    public function __construct($data = [])
-    {
-        $this->getFields();
-        $this->setData($data);
-    }
-
     public static function fields()
     {
         return [];
@@ -99,11 +93,21 @@ class Entity extends DataObject implements EntityInterface
         parent::offsetSet($offset, $value);
     }
 
+    public function getData()
+    {
+        $keys1   = array_keys(parent::getData());
+        $keys2   = array_keys($this->fields());
+        $missing = array_diff($keys2, $keys1);
+
+        foreach ($missing as $offset) parent::offsetSet($offset, null);
+
+        return parent::getData();
+    }
+
     public function toArray()
     {
-        $offsets = $this->keys();
-        $array   = [];
-        foreach ($offsets as $offset) $array[$offset] = $this->offsetGet($offset);
+        $array = [];
+        foreach ($this->keys() as $offset) $array[$offset] = $this->offsetGet($offset);
 
         return $array;
     }

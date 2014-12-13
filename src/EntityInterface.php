@@ -5,8 +5,6 @@ namespace DataObject;
 interface EntityInterface extends DataObjectInterface
 {
 
-    public function __construct($data = []);
-
     public function getFields();
 
     public function getField($offset);
