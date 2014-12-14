@@ -54,8 +54,8 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     public function testRawData()
     {
         $entity = new User();
-        $data   = $entity->getData();
         $raw    = $entity->getRawData();
+        $data   = $entity->getData();
 
         $this->assertInstanceOf('DateTime', $data['date_create']);
         $this->assertNull($raw['date_create']);
