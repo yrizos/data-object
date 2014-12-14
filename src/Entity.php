@@ -2,8 +2,6 @@
 
 namespace DataObject;
 
-use DataObject\Type\RawType;
-
 class Entity extends DataObject implements EntityInterface
 {
 
@@ -17,6 +15,9 @@ class Entity extends DataObject implements EntityInterface
         return [];
     }
 
+    /**
+     * @return array
+     */
     public function getFields()
     {
 
@@ -27,9 +28,12 @@ class Entity extends DataObject implements EntityInterface
                 $offset = trim(strval($offset));
                 if (empty($offset)) continue;
 
+                $type    = isset($value['type']) ? $value['type'] : null;
+                $default = isset($value['default']) ? $value['default'] : null;
+
                 $this->fields[$offset] = [
-                    'type' => isset($value['type']) ? $this->getType($value['type']) : new RawType(),
-                    'default' => isset($value['default']) ? $value['default'] : null
+                    'type'    => $this->getType($type),
+                    'default' => $default
                 ];
 
                 parent::offsetSet($offset, null);
@@ -39,11 +43,19 @@ class Entity extends DataObject implements EntityInterface
         return $this->fields;
     }
 
+    /**
+     * @param string $type
+     * @return TypeInterface
+     */
     protected function getType($type)
     {
         return Type::factory($type);
     }
 
+    /**
+     * @param string $offset
+     * @return array|null
+     */
     public function getField($offset)
     {
         $offset = trim(strval($offset));
@@ -52,16 +64,20 @@ class Entity extends DataObject implements EntityInterface
     }
 
     /**
-     * @param $offset
+     * @param string $offset
      * @return TypeInterface
      */
     public function getFieldType($offset)
     {
         $field = $this->getField($offset);
 
-        return $field ? $field['type'] : new RawType();
+        return $field ? $field['type'] : $this->getType('raw');
     }
 
+    /**
+     * @param string $offset
+     * @return mixed
+     */
     public function getDefault($offset)
     {
         $field = $this->getField($offset);
@@ -69,26 +85,36 @@ class Entity extends DataObject implements EntityInterface
         return $field ? $field['default'] : null;
     }
 
+    /**
+     * @return bool
+     */
     public function isModified()
     {
         return $this->modified === true;
     }
 
+    /**
+     * @param string $offset
+     * @return mixed|null
+     */
     public function offsetGet($offset)
     {
-        if (!isset($this[$offset])) return $this->getDefault($offset);
+        $value = $this->offsetExists($offset) ? parent::offsetGet($offset) : $this->getDefault($offset);
+        $type  = $this->getFieldType($offset);
 
-        $type = $this->getFieldType($offset);
-
-        return $type->filter($this[$offset]);
+        return $type->filter($value);
     }
 
+    /**
+     * @param string $offset
+     * @param mixed $value
+     * @throws \InvalidArgumentException
+     */
     public function offsetSet($offset, $value)
     {
         $type = $this->getFieldType($offset);
         if (!$type->validate($value)) throw new \InvalidArgumentException($offset . ' validation failed.');
 
-        $value = $type->filter($value);
         if ($value !== parent::offsetGet($offset)) $this->modified = true;
 
         parent::offsetSet($offset, $value);
@@ -96,20 +122,19 @@ class Entity extends DataObject implements EntityInterface
 
     public function getData()
     {
-        $keys1   = array_keys(parent::getData());
-        $keys2   = array_keys($this->fields());
-        $missing = array_diff($keys2, $keys1);
+        $data    = [];
+        $offsets = array_merge(array_keys(parent::getData()), array_keys($this->fields()));
 
-        foreach ($missing as $offset) parent::offsetSet($offset, null);
+        foreach ($offsets as $offset) $data[$offset] = $this->offsetGet($offset);
 
-        return parent::getData();
+        return $data;
     }
 
-    public function toArray()
+    /**
+     * @return array
+     */
+    public function getRawData()
     {
-        $array = [];
-        foreach ($this->keys() as $offset) $array[$offset] = $this->offsetGet($offset);
-
-        return $array;
+        return parent::getData();
     }
 } 

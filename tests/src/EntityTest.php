@@ -51,14 +51,14 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($entity->isModified());
     }
 
-    public function testToArray()
+    public function testRawData()
     {
         $entity = new User();
         $data   = $entity->getData();
-        $array  = $entity->toArray();
+        $raw    = $entity->getRawData();
 
-        $this->assertNull($data['date_create']);
-        $this->assertInstanceOf('DateTime', $array['date_create']);
+        $this->assertInstanceOf('DateTime', $data['date_create']);
+        $this->assertNull($raw['date_create']);
     }
 
     /**
@@ -68,5 +68,19 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     {
         $entity        = new User();
         $entity->email = 'Hello World';
+    }
+
+    public function testFilteredData()
+    {
+        $time              = time();
+        $user              = new User();
+        $user->date_create = $time;
+
+        $this->assertInternalType('integer', $user->getRawData()['date_create']);
+        $this->assertInstanceOf('DateTime', $user->getData()['date_create']);
+        $this->assertInstanceOf('DateTime', $user['date_create']);
+
+        $this->assertEquals($time, $user->getRawData()['date_create']);
+        $this->assertEquals(new \DateTime('@' . $time), $user->getData()['date_create']);
     }
 } 

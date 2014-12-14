@@ -55,7 +55,7 @@ class DataObject implements DataObjectInterface
         return $this->offsetGet($offset);
     }
 
-    final  public function __isset($offset)
+    final public function __isset($offset)
     {
         return $this->offsetExists($offset);
     }
@@ -82,7 +82,7 @@ class DataObject implements DataObjectInterface
 
     public function serialize()
     {
-        return serialize($this->toArray());
+        return serialize($this->getData());
     }
 
     public function unserialize($data)
@@ -94,17 +94,7 @@ class DataObject implements DataObjectInterface
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->toArray());
-    }
-
-    public function toArray()
-    {
-        return $this->getData();
-    }
-
-    public function toJson()
-    {
-        return json_encode($this->toArray());
+        return new \ArrayIterator($this->getData());
     }
 
     public static function normalizeArray($data)
