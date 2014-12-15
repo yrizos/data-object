@@ -16,8 +16,4 @@ interface DataObjectInterface extends \ArrayAccess, \Countable, \Serializable, \
     public function __isset($offset);
 
     public function __unset($offset);
-
-    public function values();
-
-    public function keys();
 }

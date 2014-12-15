@@ -65,16 +65,6 @@ class DataObject implements DataObjectInterface
         return $this->offsetUnset($offset);
     }
 
-    public function values()
-    {
-        return array_values($this->data);
-    }
-
-    public function keys()
-    {
-        return array_keys($this->getData());
-    }
-
     public function count()
     {
         return count($this->getData());

@@ -17,5 +17,7 @@ interface EntityInterface extends DataObjectInterface
 
     public function isModified();
 
+    public function keys();
+
     public static function fields();
 } 

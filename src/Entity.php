@@ -123,11 +123,23 @@ class Entity extends DataObject implements EntityInterface
         parent::offsetSet($offset, $value);
     }
 
+    public function keys()
+    {
+        $keys_fields = array_flip(array_keys($this->getFields()));
+        $keys_data   = array_flip(array_keys(parent::getData()));
+        $keys        = array_flip(array_merge($keys_fields, $keys_data));
+
+        return $keys;
+    }
+
     public function getData()
     {
-        $offsets = array_keys($this->getRawData());
+        $offsets = $this->keys();
+        $data    = [];
 
-        foreach ($offsets as $offset) $data[$offset] = $this->offsetGet($offset);
+        foreach ($offsets as $offset) {
+            $data[$offset] = $this->offsetGet($offset);
+        }
 
         return $data;
     }
@@ -137,14 +149,13 @@ class Entity extends DataObject implements EntityInterface
      */
     public function getRawData()
     {
-        $offsets = array_keys($this->getFields());
+        $offsets = $this->keys();
+        $data    = parent::getData();
 
         foreach ($offsets as $offset) {
-            if (!parent::offsetExists($offset)) {
-                parent::offsetSet($offset, null);
-            }
+            if (!isset($data[$offset])) $data[$offset] = null;
         }
 
-        return parent::getData();
+        return $data;
     }
 } 

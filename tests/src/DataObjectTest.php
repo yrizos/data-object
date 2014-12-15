@@ -71,32 +71,6 @@ class DataObjectTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testValues()
-    {
-        $dto = new DataObject();
-        $dto->setData($this->data);
-
-        $this->assertEquals(array_values($this->data), $dto->values());
-
-        $arrayObject = new \ArrayObject($this->data);
-        $dto->setData($arrayObject);
-
-        $this->assertEquals(array_values($this->data), $dto->values());
-
-        $dto2 = new DataObject();
-        $dto2->setData($dto);
-
-        $this->assertEquals(array_values($this->data), $dto->values());
-    }
-
-    public function testKeys()
-    {
-        $dto = new DataObject();
-        $dto->setData($this->data);
-
-        $this->assertEquals(array_keys($this->data), $dto->keys());
-    }
-
     public function testCount()
     {
         $dto = new DataObject();
